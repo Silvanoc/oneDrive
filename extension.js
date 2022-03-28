@@ -74,10 +74,13 @@ class Indicator extends PanelMenu.Button {
         this.itemLogin = itemLogin;
 
         let itemStatus = new PopupMenu.PopupMenuItem(_('Show service status'));
+        let app = Gio.AppInfo.create_from_commandline(
+            "systemctl --user status onedrive",
+            null,
+            Gio.AppInfoCreateFlags.SUPPORTS_STARTUP_NOTIFICATION |
+            Gio.AppInfoCreateFlags.NEEDS_TERMINAL);
         itemStatus.connect('activate', () => {
-
-            GLib.spawn_command_line_sync(
-                'gnome-terminal --tab --title="Status" --command=\"systemctl --user status onedrive\"');
+            app.launch([], global.create_app_launch_context(0, -1));
         });
         this.menu.addMenuItem(itemStatus);
 
